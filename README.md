@@ -1,2 +1,2 @@
-# ESP-MQTT + BME280 sample application
+# ESP-MQTT + ds18x20 Temperature sensor + ninux OTA
 
