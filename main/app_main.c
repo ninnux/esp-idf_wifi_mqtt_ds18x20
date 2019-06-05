@@ -118,8 +118,9 @@ void ds18x20_test(void *pvParameter)
                      uint32_t addr1 = addrs[j];
                      float temp_c = temps[j];
                      float temp_f = (temp_c * 1.8) + 32;
+		     float temp_c_10 = temp_c*10;
                      printf("  Sensor %08x%08x reports %f deg C (%f deg F)\n", addr0, addr1, temp_c, temp_f);
-	                 sprintf((char*)msgData,"{\"temp\":%d}",(int) temp_c*10);
+	                 sprintf((char*)msgData,"{\"temp\":%d}",(int) temp_c_10);
                  }
                  printf("\n");
 
