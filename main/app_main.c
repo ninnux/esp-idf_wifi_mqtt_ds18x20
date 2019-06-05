@@ -91,11 +91,12 @@ void ds18x20_test(void *pvParameter)
 
          // Every RESCAN_INTERVAL samples, check to see if the sensors connected
          // to our bus have changed.
-         sensor_count = ds18x20_scan_devices(SENSOR_GPIO, addrs, MAX_SENSORS);
+	 scan: sensor_count = ds18x20_scan_devices(SENSOR_GPIO, addrs, MAX_SENSORS);
 
-         if (sensor_count < 1)
+         if (sensor_count < 1){
              printf("No sensors detected!\n");
-         else
+	     goto scan;
+         }else
          {
              printf("%d sensors detected:\n", sensor_count);
              // If there were more sensors found than we have space to handle,
@@ -118,7 +119,7 @@ void ds18x20_test(void *pvParameter)
                      float temp_c = temps[j];
                      float temp_f = (temp_c * 1.8) + 32;
                      printf("  Sensor %08x%08x reports %f deg C (%f deg F)\n", addr0, addr1, temp_c, temp_f);
-	                 sprintf((char*)msgData,"{\"temp\":%d}",(int) temp_c*100);
+	                 sprintf((char*)msgData,"{\"temp\":%d}",(int) temp_c*10);
                  }
                  printf("\n");
 
