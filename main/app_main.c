@@ -185,7 +185,12 @@ void sleeppa(int sec)
 
     printf("Entering deep sleep\n");
     gettimeofday(&sleep_enter_time, NULL);
+    esp_wifi_disconnect();
+    esp_wifi_stop();
+    esp_wifi_deinit();
 
+
+    //ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_MAX_MODEM));
     esp_deep_sleep_start();
 }
 static esp_err_t mqtt_event_handler(esp_mqtt_event_handle_t event)
@@ -249,6 +254,7 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
             	esp_wifi_connect();
             	xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
                 s_retry_num++;
+		printf("riprovo la %d volta!!\n",s_retry_num);
 	    }else{
 		printf("restart!!\n");
 		esp_restart();	
@@ -263,6 +269,18 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
 
 static void wifi_init(void)
 {
+
+    esp_err_t err = nvs_flash_init();
+    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+        // 1.OTA app partition table has a smaller NVS partition size than the non-OTA
+        // partition table. This size mismatch may cause NVS initialization to fail.
+        // 2.NVS partition contains data in new format and cannot be recognized by this version of code.
+        // If this happens, we erase NVS partition and initialize NVS again.
+        ESP_ERROR_CHECK(nvs_flash_erase());
+        err = nvs_flash_init();
+    }
+
+
     tcpip_adapter_init();
     wifi_event_group = xEventGroupCreate();
     ESP_ERROR_CHECK(esp_event_loop_init(wifi_event_handler, NULL));
@@ -275,6 +293,7 @@ static void wifi_init(void)
             .password = CONFIG_WIFI_PASSWORD,
         },
     };
+    //ESP_ERROR_CHECK(esp_wifi_set_ps(WIFI_PS_NONE));
     ESP_ERROR_CHECK(esp_wifi_set_mode(WIFI_MODE_STA));
     ESP_ERROR_CHECK(esp_wifi_set_config(ESP_IF_WIFI_STA, &wifi_config));
     ESP_LOGI(TAG, "start the WIFI SSID:[%s]", CONFIG_WIFI_SSID);
@@ -354,15 +373,16 @@ void app_main()
 
 
 
-    esp_err_t err = nvs_flash_init();
-    if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
-        // 1.OTA app partition table has a smaller NVS partition size than the non-OTA
-        // partition table. This size mismatch may cause NVS initialization to fail.
-        // 2.NVS partition contains data in new format and cannot be recognized by this version of code.
-        // If this happens, we erase NVS partition and initialize NVS again.
-        ESP_ERROR_CHECK(nvs_flash_erase());
-        err = nvs_flash_init();
-    }
+    //esp_err_t err = nvs_flash_init();
+    //if (err == ESP_ERR_NVS_NO_FREE_PAGES || err == ESP_ERR_NVS_NEW_VERSION_FOUND) {
+    //    // 1.OTA app partition table has a smaller NVS partition size than the non-OTA
+    //    // partition table. This size mismatch may cause NVS initialization to fail.
+    //    // 2.NVS partition contains data in new format and cannot be recognized by this version of code.
+    //    // If this happens, we erase NVS partition and initialize NVS again.
+    //    ESP_ERROR_CHECK(nvs_flash_erase());
+    //    err = nvs_flash_init();
+    //}
+
     wifi_init();
     esp_ota_mark_app_valid_cancel_rollback(); 
     ninux_esp32_ota();
