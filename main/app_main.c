@@ -64,7 +64,7 @@ uint8_t msgData[32];
 SemaphoreHandle_t xSemaphore = NULL;
 
 
-static const gpio_num_t SENSOR_GPIO = 17;
+static const gpio_num_t SENSOR_GPIO = 19;
 static const uint32_t LOOP_DELAY_MS = 250;
 static const int MAX_SENSORS = 8;
 static const int RESCAN_INTERVAL = 8;
@@ -119,9 +119,9 @@ void ds18x20_test(void *pvParameter)
                      float temp_c = temps[j];
                      float temp_f = (temp_c * 1.8) + 32;
 		     float temp_c_10 = temp_c*10;
-		     float volt=ninux_voltage_meter();
+		     float volt=ninux_voltage_reader();
                      printf("  Sensor %08x%08x reports %f deg C (%f deg F)\n", addr0, addr1, temp_c, temp_f);
-	                 sprintf((char*)msgData,"{\"temp\":%d,\"bat\":%d}",(int) temp_c_10,(int) volt*10);
+	                 sprintf((char*)msgData,"{\"temp\":%d,\"bat\":%f}",(int) temp_c_10, volt*10);
                  }
                  printf("\n");
 
