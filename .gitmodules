@@ -1,3 +1,6 @@
 [submodule "components/ninux_esp32_ota"]
 	path = components/ninux_esp32_ota
 	url = https://github.com/ninnux/ninux_esp32_ota.git
+[submodule "components/ninux_voltage_reader"]
+	path = components/ninux_voltage_reader
+	url = https://github.com/ninnux/ninnux_voltage_reader.git

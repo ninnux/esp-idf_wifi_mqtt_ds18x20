@@ -39,7 +39,7 @@
 #include "ds18x20.h"
 
 #include "ninux_esp32_ota.h"
-
+#include "ninux_voltage_reader.h"
 
 #define SDA_PIN GPIO_NUM_21
 #define SCL_PIN GPIO_NUM_22
@@ -119,8 +119,9 @@ void ds18x20_test(void *pvParameter)
                      float temp_c = temps[j];
                      float temp_f = (temp_c * 1.8) + 32;
 		     float temp_c_10 = temp_c*10;
+		     float volt=ninux_voltage_meter();
                      printf("  Sensor %08x%08x reports %f deg C (%f deg F)\n", addr0, addr1, temp_c, temp_f);
-	                 sprintf((char*)msgData,"{\"temp\":%d}",(int) temp_c_10);
+	                 sprintf((char*)msgData,"{\"temp\":%d,\"bat\":%d}",(int) temp_c_10,(int) volt*10);
                  }
                  printf("\n");
 
