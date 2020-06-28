@@ -64,7 +64,7 @@ uint8_t msgData[32];
 SemaphoreHandle_t xSemaphore = NULL;
 
 
-static const gpio_num_t SENSOR_GPIO = 21;
+static const gpio_num_t SENSOR_GPIO = 17;
 static const uint32_t LOOP_DELAY_MS = 250;
 static const int MAX_SENSORS = 8;
 static const int RESCAN_INTERVAL = 8;

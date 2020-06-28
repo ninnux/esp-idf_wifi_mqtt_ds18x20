@@ -3,5 +3,5 @@
 # project subdirectory.
 #
 PROJECT_NAME := esp-idf_wifi_mqtt_ds18x20
-PROJECT_VER = "0.2"
+PROJECT_VER = "0.5"
 include $(IDF_PATH)/make/project.mk
