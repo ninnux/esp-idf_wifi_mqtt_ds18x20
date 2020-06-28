@@ -64,7 +64,7 @@ uint8_t msgData[32];
 SemaphoreHandle_t xSemaphore = NULL;
 
 
-static const gpio_num_t SENSOR_GPIO = 17;
+static const gpio_num_t SENSOR_GPIO = 21;
 static const uint32_t LOOP_DELAY_MS = 250;
 static const int MAX_SENSORS = 8;
 static const int RESCAN_INTERVAL = 8;
@@ -251,14 +251,15 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
             break;
         case SYSTEM_EVENT_STA_DISCONNECTED:
         {
-            if (s_retry_num < 3) {
+            if (s_retry_num < 5) {
             	esp_wifi_connect();
             	xEventGroupClearBits(wifi_event_group, CONNECTED_BIT);
                 s_retry_num++;
 		printf("riprovo la %d volta!!\n",s_retry_num);
 	    }else{
 		printf("restart!!\n");
-		esp_restart();	
+      		sleeppa(300);
+		//esp_restart();	
 	    } 
             break;
 	}
