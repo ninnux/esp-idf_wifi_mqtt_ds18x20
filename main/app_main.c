@@ -256,6 +256,7 @@ static esp_err_t wifi_event_handler(void *ctx, system_event_t *event)
                 s_retry_num++;
 		printf("riprovo la %d volta!!\n",s_retry_num);
 	    }else{
+		sleeppa(300);
 		printf("restart!!\n");
 		esp_restart();	
 	    } 
